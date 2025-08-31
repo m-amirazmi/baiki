@@ -1,6 +1,6 @@
 "use client";
 
-import AuthWatcher from "@/components/authWatcher";
+import AuthWatcher from "@/components/auth-watcher";
 import { ConvexAuthNextjsProvider } from "@convex-dev/auth/nextjs";
 import { ConvexReactClient } from "convex/react";
 import { ReactNode } from "react";
