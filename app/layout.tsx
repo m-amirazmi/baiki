@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { ConvexClientProvider } from "@/contexts/ConvexClientProvider";
+import { ConvexClientProvider } from "@/contexts/convex-client-provider";
 import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server";
 import AuthWatcher from "@/components/auth-watcher";
 import { ThemeProvider } from "@/contexts/theme";
