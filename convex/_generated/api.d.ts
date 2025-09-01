@@ -15,8 +15,8 @@ import type {
 } from "convex/server";
 import type * as auth from "../auth.js";
 import type * as http from "../http.js";
-import type * as mutations_auth from "../mutations/auth.js";
 import type * as schema_roles from "../schema/roles.js";
+import type * as users from "../users.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -29,8 +29,8 @@ import type * as schema_roles from "../schema/roles.js";
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   http: typeof http;
-  "mutations/auth": typeof mutations_auth;
   "schema/roles": typeof schema_roles;
+  users: typeof users;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

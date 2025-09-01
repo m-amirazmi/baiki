@@ -13,4 +13,9 @@ const userRoles = defineTable({
   .index("by_user", ["userId"])
   .index("by_role", ["roleId"]);
 
-export const roleTables = { roles, userRoles };
+const userPreferredRoles = defineTable({
+  userId: v.id("users"),
+  roleId: v.id("roles"),
+}).index("by_user", ["userId"]);
+
+export const roleTables = { roles, userRoles, userPreferredRoles };

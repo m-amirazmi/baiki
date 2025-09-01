@@ -1,11 +1,13 @@
+"server-only";
+
+import { ConvexClientProvider } from "@/contexts/convex-client-provider";
+import { ThemeProvider } from "@/contexts/theme";
+import { cn } from "@/lib/utils";
+import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { ConvexClientProvider } from "@/contexts/convex-client-provider";
-import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server";
-import AuthWatcher from "@/components/auth-watcher";
-import { ThemeProvider } from "@/contexts/theme";
-import { cn } from "@/lib/utils";
+import RoleGuard from "@/components/role-guard";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +29,7 @@ export const metadata: Metadata = {
 // 1. Auth
 // 2. Roles
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

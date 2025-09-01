@@ -1,4 +1,4 @@
-export enum ROLE {
+export enum Role {
   PLATFORM = "platform",
   CUSTOMER = "customer",
   TENANT = "tenant",

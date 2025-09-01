@@ -1,7 +1,5 @@
 "use client";
 
-import * as React from "react";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,18 +15,43 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { RiExpandUpDownLine, RiAddLine } from "@remixicon/react";
+import { useState } from "react";
 
-export function TeamSwitcher({
-  teams,
-}: {
+type TeamSwitcherProps = {
   teams: {
     name: string;
     logo: string;
   }[];
-}) {
-  const [activeTeam, setActiveTeam] = React.useState(teams[0] ?? null);
+  enableDropdown?: boolean;
+};
+
+export function TeamSwitcher({ teams, enableDropdown }: TeamSwitcherProps) {
+  const [activeTeam, setActiveTeam] = useState(teams[0] ?? null);
 
   if (!teams.length) return null;
+  if (!enableDropdown)
+    return (
+      <SidebarMenuButton
+        size="lg"
+        className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground gap-3 [&>svg]:size-auto"
+      >
+        <div className="flex aspect-square size-8 items-center justify-center rounded-md overflow-hidden bg-sidebar-primary text-sidebar-primary-foreground">
+          {activeTeam && (
+            <img
+              src={activeTeam.logo}
+              width={36}
+              height={36}
+              alt={activeTeam.name}
+            />
+          )}
+        </div>
+        <div className="grid flex-1 text-left text-base leading-tight">
+          <span className="truncate font-medium">
+            {activeTeam?.name ?? "Select a Team"}
+          </span>
+        </div>
+      </SidebarMenuButton>
+    );
 
   return (
     <SidebarMenu>
