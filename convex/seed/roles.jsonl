@@ -1,6 +1,0 @@
-{"name": "platform","description": "SaaS platform owner"}
-{"name": "tenant","description": "Tenant admin"}
-{"name": "outlet","description": "Outlet manager"}
-{"name": "technician","description": "Repair technician"}
-{"name": "pos","description": "POS system user"}
-{"name": "customer","description": "Customer accessing portal"}
