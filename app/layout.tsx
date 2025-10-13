@@ -28,6 +28,7 @@ export const metadata: Metadata = {
 // Here will check the
 // 1. Auth
 // 2. Roles
+// 3. Sini
 
 export default async function RootLayout({
   children,
