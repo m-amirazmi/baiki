@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Baiki RMS",
+  title: "Baiki RMS Try",
   description: "Baiki Repair Management System by Baiki Labs",
 };
 
