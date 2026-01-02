@@ -1,5 +1,11 @@
-import { prisma } from "@/lib/prisma";
+import { api } from "@/lib/eden";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: "Baiki Business | Repair Management Platform",
+  description: "Manage repair businesses efficiently with Baiki.",
+};
 
 export default async function BusinessLayout({
   children,
@@ -10,11 +16,9 @@ export default async function BusinessLayout({
 }) {
   const { businessSlug } = await params;
 
-  const isExists = await prisma.business.findUnique({
-    where: { slug: businessSlug },
-  });
+  const { data } = await api.tenants({ slug: businessSlug }).get();
 
-  if (!isExists) {
+  if (!data) {
     notFound();
   }
 
