@@ -16,6 +16,9 @@ export default async function BusinessAdminPage({
       <p>
         Business Name: {data?.name} {data?.id}
       </p>
+      <p>
+        Business Status: {data?.status} - Type: {data?.type}
+      </p>
     </div>
   );
 }
