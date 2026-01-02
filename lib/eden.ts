@@ -3,6 +3,6 @@ import { app } from "../app/api/[[...slugs]]/route";
 
 // .api to enter /api prefix
 export const api =
-  typeof process !== "undefined"
+  typeof process !== "undefined" && typeof window === "undefined"
     ? treaty(app).api
-    : treaty<typeof app>("localhost:3000").api;
+    : treaty<typeof app>(process.env.NEXT_PUBLIC_ROOT_DOMAIN || "").api;

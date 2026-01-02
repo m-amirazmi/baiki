@@ -1,4 +1,3 @@
-// Controller handle HTTP related eg. routing, request validation
 import { Elysia } from "elysia";
 import { TenantService } from "./tenant.service";
 import { TenantDto } from "./tenant.model";
