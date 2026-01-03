@@ -1,6 +1,6 @@
 import { Elysia } from "elysia";
-import { AuthService } from "./auth.service";
 import { AuthDto } from "./auth.model";
+import { AuthService } from "./auth.service";
 
 export const auth = new Elysia({ prefix: "/auth" })
   .post(

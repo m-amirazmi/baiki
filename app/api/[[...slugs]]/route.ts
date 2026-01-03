@@ -5,14 +5,18 @@ import { tenants } from "@/modules/tenant/tenant.controller";
 import { errorPlugin } from "@/lib/plugins/error.plugin";
 import { loggingPlugin } from "@/lib/plugins/logging.plugin";
 import { Elysia } from "elysia";
+import { user } from "@/modules/user/user.controller";
 
-export const app = new Elysia({ prefix: "/api" })
+export const app = new Elysia({
+  prefix: "/api",
+})
   .use(loggingPlugin)
   .use(errorPlugin)
   .mount("/api", authentication.handler)
   .use(auth)
   .use(registration)
-  .use(tenants);
+  .use(tenants)
+  .use(user);
 
 export const GET = app.fetch;
 export const POST = app.fetch;

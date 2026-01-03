@@ -120,10 +120,40 @@ export abstract class TenantService {
     }
   }
 
-  // static async updateTenant(
-  //   slug: string,
-  //   data: { name: string; description?: string }
-  // ) {}
+  static async getTenantById(id: string): Promise<Tenant> {
+    try {
+      logger.info({ id }, "Fetching tenant by ID");
 
-  // static async archiveTenant(slug: string) {}
+      const tenant = await prisma.tenant.findUnique({
+        where: { id },
+      });
+
+      if (!tenant) {
+        logger.warn({ id }, "Tenant not found");
+        throw new NotFoundError("Tenant", id);
+      }
+
+      logger.info({ tenantId: tenant.id }, "Tenant fetched successfully");
+
+      return {
+        id: tenant.id,
+        name: tenant.name,
+        slug: tenant.slug,
+        status: tenant.status,
+        type: tenant.type,
+        createdBy: tenant.created_by,
+        createdAt: tenant.created_at.toISOString(),
+        onboardedAt: tenant.onboarded_at
+          ? tenant.onboarded_at.toISOString()
+          : null,
+        updatedAt: tenant.updated_at.toISOString(),
+      };
+    } catch (error) {
+      if (error instanceof NotFoundError) {
+        throw error;
+      }
+      logger.error({ error, id }, "Failed to fetch tenant");
+      throw new DatabaseError("Failed to fetch tenant", error);
+    }
+  }
 }

@@ -69,4 +69,40 @@ export abstract class TenantUserService {
       );
     }
   }
+
+  static async getTenantUserByEmail(email: string): Promise<TenantUser> {
+    try {
+      logger.info({ email }, "Fetching tenant-user by email");
+
+      const tenantUser = await prisma.tenantUser.findFirst({
+        where: {
+          user: {
+            email: email,
+          },
+        },
+      });
+
+      if (!tenantUser) {
+        logger.warn({ email }, "Tenant-user not found for email");
+        throw new DatabaseError("Tenant-user not found for the given email");
+      }
+
+      logger.info(
+        { tenantUserId: tenantUser.id, email },
+        "Tenant-user fetched successfully"
+      );
+
+      return {
+        id: tenantUser.id,
+        tenantId: tenantUser.tenantId,
+        userId: tenantUser.userId,
+        role: tenantUser.role,
+        createdAt: tenantUser.createdAt.toISOString(),
+        updatedAt: tenantUser.updatedAt.toISOString(),
+      };
+    } catch (error) {
+      logger.error({ error, email }, "Failed to fetch tenant-user by email");
+      throw new DatabaseError("Failed to fetch tenant-user by email", error);
+    }
+  }
 }
