@@ -5,12 +5,10 @@ import { Button } from "../ui/button";
 
 export const SignInForm = () => {
   const handleSignIn = async () => {
-    const user = await signInEmail({
+    await signInEmail({
       email: "abc@email.com",
       password: "securepassword123",
     });
-
-    console.log("Signed in user:", user);
   };
 
   return (

@@ -32,13 +32,19 @@ export const CreateBusinessForm = () => {
     setLoading(true);
     setError(null);
     try {
-      await createTenant({
+      const result = await createTenant({
         name,
         slug,
         createdBy: "user-123",
         status,
         type,
+        token: localStorage.getItem("token") || "",
       });
+
+      if (!result.success) {
+        setError(result.error || "Failed to create tenant");
+        return;
+      }
 
       // Redirect to the business subdomain
       window.location.href = `//${slug}.${window.location.hostname}/`;
