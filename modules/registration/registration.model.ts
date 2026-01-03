@@ -1,3 +1,4 @@
+import { TenantUserRole } from "@/app/generated/prisma/enums";
 import { t } from "elysia";
 
 export const RegistrationDto = {
@@ -12,6 +13,7 @@ export const RegistrationDto = {
       id: t.String(),
       name: t.String(),
       email: t.String(),
+      role: t.Enum(TenantUserRole),
     }),
     tenant: t.Object({
       id: t.String(),

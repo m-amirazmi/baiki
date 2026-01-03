@@ -3,6 +3,7 @@ import { AuthService } from "../auth/auth.service";
 import { RegistrationBody, RegistrationResponse } from "./registration.model";
 import { TenantService } from "../tenant/tenant.service";
 import { generateUniqueSlug } from "@/lib/server-utils";
+import { TenantUserService } from "../tenant/tenant-user.service";
 
 export abstract class RegistrationService {
   static async register(body: RegistrationBody): Promise<RegistrationResponse> {
@@ -20,11 +21,17 @@ export abstract class RegistrationService {
       createdBy: user!.id,
       slug,
     });
+    const tenantUser = await TenantUserService.createTenantUser({
+      role: "OWNER",
+      tenantId: tenant.id,
+      userId: user!.id,
+    });
     return {
       user: {
         id: user!.id,
         name: user!.name,
         email: user!.email,
+        role: tenantUser.role,
       },
       tenant: {
         id: tenant.id,
