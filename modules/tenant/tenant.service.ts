@@ -13,7 +13,9 @@ export abstract class TenantService {
       type: tenant.type,
       createdBy: tenant.created_by,
       createdAt: tenant.created_at.toISOString(),
-      onboardedAt: tenant.onboarded_at.toISOString(),
+      onboardedAt: tenant.onboarded_at
+        ? tenant.onboarded_at.toISOString()
+        : null,
       updatedAt: tenant.updated_at.toISOString(),
     }));
   }
@@ -37,7 +39,9 @@ export abstract class TenantService {
       type: newTenant.type,
       createdBy: newTenant.created_by,
       createdAt: newTenant.created_at.toISOString(),
-      onboardedAt: newTenant.onboarded_at.toISOString(),
+      onboardedAt: newTenant.onboarded_at
+        ? newTenant.onboarded_at.toISOString()
+        : null,
       updatedAt: newTenant.updated_at.toISOString(),
     };
   }
@@ -58,7 +62,9 @@ export abstract class TenantService {
       type: tenant.type,
       createdBy: tenant.created_by,
       createdAt: tenant.created_at.toISOString(),
-      onboardedAt: tenant.onboarded_at.toISOString(),
+      onboardedAt: tenant.onboarded_at
+        ? tenant.onboarded_at.toISOString()
+        : null,
       updatedAt: tenant.updated_at.toISOString(),
     };
   }

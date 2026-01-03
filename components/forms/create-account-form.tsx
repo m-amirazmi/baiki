@@ -22,12 +22,11 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { registrationAction } from "@/modules/registration/registration.action";
+import { signUpEmail } from "@/modules/auth/auth.actions";
 import { useState } from "react";
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
-  businessName: z.string().min(1, { message: "Business name is required" }),
   email: z.email("Please enter a valid email address."),
   password: z
     .string()
@@ -41,7 +40,11 @@ const formSchema = z.object({
     }),
 });
 
-export function SignUpForm() {
+interface CreateAccountFormProps {
+  onNext?: () => void;
+}
+
+export function CreateAccountForm({ onNext }: CreateAccountFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -49,7 +52,6 @@ export function SignUpForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      businessName: "",
       email: "",
       password: "",
     },
@@ -59,9 +61,8 @@ export function SignUpForm() {
     setIsSubmitting(true);
     setError(null);
 
-    const response = await registrationAction({
+    const response = await signUpEmail({
       name: data.name,
-      businessName: data.businessName,
       email: data.email,
       password: data.password,
     });
@@ -77,21 +78,15 @@ export function SignUpForm() {
       return;
     }
 
-    if (!response.data) {
-      setError("Failed to create account. Please try again.");
-      return;
-    }
-
-    const hostname = window.location.hostname;
-    window.location.assign(`//${response.data.tenant.slug}.${hostname}/`);
+    if (onNext) onNext();
   };
 
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Sign Up</CardTitle>
+        <CardTitle>Create account</CardTitle>
         <CardDescription>
-          Please enter your details to create an account.
+          Please enter your email and password to create an account.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -115,28 +110,6 @@ export function SignUpForm() {
                     id="signup-name"
                     aria-invalid={fieldState.invalid}
                     placeholder="Your name"
-                    type="text"
-                    disabled={isSubmitting}
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-            <Controller
-              name="businessName"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="signup-businessName">
-                    Business Name
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id="signup-businessName"
-                    aria-invalid={fieldState.invalid}
-                    placeholder="Your business name (e.g., Acme Corp)"
                     type="text"
                     disabled={isSubmitting}
                   />
@@ -193,11 +166,20 @@ export function SignUpForm() {
         <Field orientation="horizontal" className="w-full">
           <Button
             className="flex-1"
+            type="button"
+            variant="outline"
+            onClick={() => form.reset()}
+            disabled={isSubmitting}
+          >
+            Reset
+          </Button>
+          <Button
+            className="flex-1"
             type="submit"
             form="signup"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Creating..." : "Create Account"}
+            {isSubmitting ? "Creating..." : "Next to Business Info"}
           </Button>
         </Field>
       </CardFooter>

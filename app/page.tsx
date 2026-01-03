@@ -1,15 +1,13 @@
-import { CreateBusinessForm } from "@/components/forms/create-business-form";
-import { SignInForm } from "@/components/forms/signin-form";
 import { AllTenants } from "@/components/platform/all-tenants";
 import { api } from "@/lib/eden";
+import Link from "next/link";
 
 export default async function Page() {
   const { data } = await api.tenants.get();
 
   return (
     <div>
-      <SignInForm />
-      <CreateBusinessForm />
+      <Link href="/signup">Go to Sign Up</Link>
       {data && <AllTenants tenants={data} />}
     </div>
   );
