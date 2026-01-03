@@ -4,7 +4,9 @@ import { RegistrationService } from "./registration.service";
 
 export const registration = new Elysia({ prefix: "/registration" }).post(
   "/",
-  ({ body }) => RegistrationService.register(body),
+  async ({ body }) => {
+    return await RegistrationService.register(body);
+  },
   {
     body: RegistrationDto.registerBody,
   }

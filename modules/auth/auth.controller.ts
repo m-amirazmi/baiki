@@ -3,9 +3,21 @@ import { AuthService } from "./auth.service";
 import { AuthDto } from "./auth.model";
 
 export const auth = new Elysia({ prefix: "/auth" })
-  .post("/signup", ({ body }) => AuthService.signUp(body), {
-    body: AuthDto.signUpBody,
-  })
-  .post("/signin", ({ body }) => AuthService.signIn(body), {
-    body: AuthDto.signInBody,
-  });
+  .post(
+    "/signup",
+    async ({ body }) => {
+      return await AuthService.signUp(body);
+    },
+    {
+      body: AuthDto.signUpBody,
+    }
+  )
+  .post(
+    "/signin",
+    async ({ body }) => {
+      return await AuthService.signIn(body);
+    },
+    {
+      body: AuthDto.signInBody,
+    }
+  );
