@@ -1,4 +1,5 @@
 import { api } from "@/lib/eden";
+import { getHeadersAsObject } from "@/lib/server-utils";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -15,8 +16,8 @@ export default async function BusinessLayout({
   params: Promise<{ businessSlug: string }>;
 }) {
   const { businessSlug } = await params;
-
-  const { data } = await api.tenants({ slug: businessSlug }).get();
+  const headers = await getHeadersAsObject();
+  const { data } = await api.tenants({ slug: businessSlug }).get({ headers });
 
   if (!data) {
     notFound();

@@ -1,7 +1,12 @@
 "server-only";
 
 import slugify from "slugify";
+import { headers as getHeaders } from "next/headers";
 import { prisma } from "./prisma";
+
+export async function getHeadersAsObject(): Promise<Record<string, string>> {
+  return Object.fromEntries(await getHeaders());
+}
 
 export async function generateUniqueSlug(name: string): Promise<string> {
   // Step 1: create a base slug

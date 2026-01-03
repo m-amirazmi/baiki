@@ -1,7 +1,11 @@
 import { prisma } from "@/lib/prisma";
-import { TenantUser, TenantUserBody } from "./tenant-user.model";
+import {
+  TenantUser,
+  TenantUserBody,
+  TenantUserContext,
+} from "./tenant-user.model";
 import { createModuleLogger } from "@/lib/logger";
-import { DatabaseError, ConflictError } from "@/lib/errors";
+import { DatabaseError, ConflictError, NotFoundError } from "@/lib/errors";
 import { Prisma } from "@/app/generated/prisma/client";
 
 const logger = createModuleLogger("TenantUserService");
@@ -103,6 +107,78 @@ export abstract class TenantUserService {
     } catch (error) {
       logger.error({ error, email }, "Failed to fetch tenant-user by email");
       throw new DatabaseError("Failed to fetch tenant-user by email", error);
+    }
+  }
+
+  static async getTenantUserContext(
+    userId: string,
+    tenantSlug?: string
+  ): Promise<TenantUserContext> {
+    try {
+      logger.info({ userId, tenantSlug }, "Fetching tenant-user context");
+
+      // Build query to find tenant user with user and tenant info
+      const tenantUser = await prisma.tenantUser.findFirst({
+        where: {
+          userId: userId,
+          ...(tenantSlug && {
+            tenant: {
+              slug: tenantSlug,
+            },
+          }),
+        },
+        include: {
+          user: true,
+          tenant: true,
+        },
+        orderBy: {
+          // Prefer OWNER role, then ADMIN, then most recently created
+          role: "asc",
+        },
+      });
+
+      if (!tenantUser) {
+        logger.warn({ userId, tenantSlug }, "Tenant-user context not found");
+        throw new NotFoundError(
+          "Tenant-user relationship",
+          tenantSlug
+            ? `userId: ${userId}, tenantSlug: ${tenantSlug}`
+            : `userId: ${userId}`
+        );
+      }
+
+      logger.info(
+        {
+          userId,
+          tenantId: tenantUser.tenantId,
+          tenantSlug: tenantUser.tenant.slug,
+          role: tenantUser.role,
+        },
+        "Tenant-user context fetched successfully"
+      );
+
+      return {
+        user: {
+          id: tenantUser.user.id,
+          email: tenantUser.user.email,
+          name: tenantUser.user.name,
+          role: tenantUser.role,
+        },
+        tenant: {
+          id: tenantUser.tenant.id,
+          name: tenantUser.tenant.name,
+          slug: tenantUser.tenant.slug,
+        },
+      };
+    } catch (error) {
+      if (error instanceof NotFoundError) {
+        throw error;
+      }
+      logger.error(
+        { error, userId, tenantSlug },
+        "Failed to fetch tenant-user context"
+      );
+      throw new DatabaseError("Failed to fetch tenant-user context", error);
     }
   }
 }

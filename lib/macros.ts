@@ -9,8 +9,6 @@ export const authMacro = new Elysia({ name: "authMacro" }).macro({
         headers,
       });
 
-      console.log(session);
-
       if (!session) return status(401);
 
       return {

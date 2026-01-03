@@ -2,6 +2,7 @@ import { auth as authentication } from "@/lib/auth";
 import { auth } from "@/modules/auth/auth.controller";
 import { registration } from "@/modules/registration/registration.controller";
 import { tenants } from "@/modules/tenant/tenant.controller";
+import { tenantUsers } from "@/modules/tenant/tenant-user.controller";
 import { errorPlugin } from "@/lib/plugins/error.plugin";
 import { loggingPlugin } from "@/lib/plugins/logging.plugin";
 import { Elysia } from "elysia";
@@ -16,6 +17,7 @@ export const app = new Elysia({
   .use(auth)
   .use(registration)
   .use(tenants)
+  .use(tenantUsers)
   .use(user);
 
 export const GET = app.fetch;

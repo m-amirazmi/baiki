@@ -1,4 +1,4 @@
-import { api } from "@/lib/eden";
+import { getTenantUserContext } from "@/modules/tenant/tenant.actions";
 
 export default async function BusinessAdminPage({
   params,
@@ -6,18 +6,17 @@ export default async function BusinessAdminPage({
   params: Promise<{ businessSlug: string }>;
 }) {
   const { businessSlug } = await params;
-
-  const { data } = await api.tenants({ slug: businessSlug }).get();
+  const { data } = await getTenantUserContext(businessSlug);
 
   return (
     <div>
       <h1>Business Admin Page</h1>
       <p>Business Slug: {businessSlug}</p>
       <p>
-        Business Name: {data?.name} {data?.id}
+        Business Name: {data?.tenant.name} {data?.tenant.id}
       </p>
       <p>
-        Business Status: {data?.status} - Type: {data?.type}
+        User Role: {data?.user.role} (User ID: {data?.user.id})
       </p>
     </div>
   );
