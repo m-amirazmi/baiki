@@ -32,3 +32,18 @@ export async function signInEmail(data: AuthSignInBody) {
     return { success: false, error: "Failed to sign in" };
   }
 }
+
+export async function signOut() {
+  try {
+    const result = await api.auth.signout.post();
+
+    if (result.error) {
+      return { success: false, error: result.error };
+    }
+
+    return { success: true, data: result.data };
+  } catch (error) {
+    console.error("Failed to sign out:", error);
+    return { success: false, error: "Failed to sign out" };
+  }
+}

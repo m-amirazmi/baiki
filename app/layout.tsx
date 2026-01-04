@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Nunito } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const nunito = Nunito({ subsets: ["latin"], variable: "--font-nunito" });
 
 export const metadata: Metadata = {
   title: "Baiki | Repair Management Platform",
@@ -15,8 +15,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.variable}>
-      <body className={`${inter.variable} antialiased`}>{children}</body>
+    <html lang="en" className={nunito.variable}>
+      <body className={`${nunito.variable} antialiased`}>{children}</body>
     </html>
   );
 }

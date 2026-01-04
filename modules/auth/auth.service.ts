@@ -76,4 +76,36 @@ export abstract class AuthService {
       throw new ExternalServiceError("Authentication service", error);
     }
   }
+
+  static async signOut(): Promise<Response> {
+    try {
+      logger.info("Attempting user signout");
+
+      const response = await auth.api.signOut({
+        headers: {},
+        asResponse: true,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        logger.warn(
+          { status: response.status, error: errorData },
+          "Signout failed"
+        );
+        throw new BadRequestError(
+          errorData.message || "Failed to sign out",
+          errorData
+        );
+      }
+
+      logger.info("User signout successful");
+      return response;
+    } catch (error) {
+      if (error instanceof BadRequestError) {
+        throw error;
+      }
+      logger.error({ error }, "Signout error");
+      throw new ExternalServiceError("Authentication service", error);
+    }
+  }
 }

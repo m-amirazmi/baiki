@@ -1,5 +1,5 @@
-import { api } from "@/lib/eden";
-import { getHeadersAsObject } from "@/lib/server-utils";
+import { TenantLayout } from "@/components/tenant/layout";
+import { getTenantUserContext } from "@/modules/tenant/tenant.actions";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -16,12 +16,11 @@ export default async function BusinessLayout({
   params: Promise<{ businessSlug: string }>;
 }) {
   const { businessSlug } = await params;
-  const headers = await getHeadersAsObject();
-  const { data } = await api.tenants({ slug: businessSlug }).get({ headers });
+  const { data: profile } = await getTenantUserContext(businessSlug);
 
-  if (!data) {
+  if (!profile) {
     notFound();
   }
 
-  return <>{children}</>;
+  return <TenantLayout profile={profile}>{children}</TenantLayout>;
 }
